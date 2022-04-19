@@ -593,3 +593,52 @@ You can see an example of this in the `Examples/` folder. The HTML has a few nic
 I hope to add more to this in the future, like making a live updating app/page which shows the current time on the visibility plot, allows you to order objects by minimum airmass, RA, or personal choice, and interact with plots all live. It'd be nice to let finder images be downloaded as FITS for easy opening in DS9, etc. (That's easy, will do that very soon).
 
 If you've made it this far, please feel free to contact me or leave an issue on this repo with ideas for things that would be useful to you as an observer. This tool is build upon the amazing core features in `astropy`, `astroquery`, etc. It's mostly about collating these, organizing them, and allowing for a lot of control. My goal is to make something useful to *me* at the telescope (or leading up to runs), that is flexible, but doesn't have a ton of overhead. I am happy to take suggestions, pull requests, etc., to add convenience methods and special treats if certain inputs are provided.
+
+## Exporting Targetlists 
+`Observing-suite` can take your observing plan (your set of targets and configurations of those targets) and export an "observatory ready" targetlist for upload/ssh to the observatory FACSUM. As each observatory has specific requirements for how this file is supposed to look, I'll be adding them on an observatory by observatory basis. 
+
+For now, the currently supported export is for Palomar Observatory. But thankfully, that format is pretty simple: 
+```
+name, ra, dec, J2000
+name, ra, dec, J2000
+...
+```
+(or whatever equinox...). So ideally, you can modify this to your needs if your observatory is not yet supported. Keck is coming soon. 
+
+You can export a targetlist by running the `export_targetlist()` method of an observing plan. By default, it will save to the current working directory a file called `targetlist.csv` but you can edit both (see docs [here](https://observing-suite.github.io/autoapi/observing_suite/observing_plan/index.html#observing_suite.observing_plan.ObservingPlan)). In particular, you can `name` the file, and set the `save_dir`. 
+
+Additionally, you may have extra information in your configurations (like PA, or offsets, etc.) which you want in your targetlist for convenience. You can add the keyword `include_extras` with a list of these keys (must be exact) and the code will attempt to add them as commented lines. For example, if we run 
+
+```python
+my_plan.export_targetlist(include_extras=['PA','offsets'])
+```
+
+then our output file will look something like this:
+
+```
+target1, 138.2353, 41.43452,J2000
+! ^^ PA: 60, offsets: 1.3" E, 45" N
+target2,138.5353, 41.43242,J2000
+! ^^ PA: 45, offsets: 6.3" E, 12.853" N
+...
+```
+Note that if a given target doesn't have the extra asked for, it will just continue on. 
+
+In the above examples, the "name" column contains just the target name as the code noticed there was only one configuration for each target. If we add a second configuration to `target1` (lets call the configs `pri` and `sec`), We'll get a file like this:
+
+```
+target1_pri, 138.2353, 41.43452,J2000
+! ^^ PA: 60, offsets: 1.3" E, 45" N
+target1_sec, 138.2353, 41.43452,J2000
+! ^^ PA: 50, offsets: 1.3" E, 45" N
+target2,138.5353, 41.43242,J2000
+! ^^ PA: 45, offsets: 6.3" E, 12.853" N
+...
+```
+
+I.e., configuration names are appended to the target name with an underscore. 
+
+```{tip}
+Many observatory ingest softwares have a max limit on each column width, so keeping both target and config names short is always a good idea. 
+```
+Similarly, if a configuration has the field `'offset star'`, a new line will be added with the format `target_config_os` so that the offset star can be navigated to directly. If you wish to turn this off, set the argument `include_offset_stars` to `False`. 
