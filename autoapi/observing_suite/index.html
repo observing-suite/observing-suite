@@ -333,6 +333,11 @@ const thebe_selector_output = ".output, .cell_output"
         </a>
        </li>
        <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#observing_suite.ObservingPlan.export_targetlist">
+         export_targetlist
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
         <a class="reference internal nav-link" href="#observing_suite.ObservingPlan.html_summary">
          html_summary
         </a>
@@ -470,6 +475,11 @@ const thebe_selector_output = ".output, .cell_output"
        <li class="toc-h5 nav-item toc-entry">
         <a class="reference internal nav-link" href="#observing_suite.ObservingPlan.plot_visibility">
          plot_visibility
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#observing_suite.ObservingPlan.export_targetlist">
+         export_targetlist
         </a>
        </li>
        <li class="toc-h5 nav-item toc-entry">
@@ -769,6 +779,36 @@ for better alignment.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="observing_suite.ObservingPlan.export_targetlist">
+<code class="sig-name descname">export_targetlist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">include_extras</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">save_path</span><span class="o">=</span><span class="default_value">'./'</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'targetlist'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/observing_suite/observing_plan.html#ObservingPlan.export_targetlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#observing_suite.ObservingPlan.export_targetlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export an observatory-compliant targetlist of all targets and configurations.
+If only one configuration exists, the name column will be the target name.
+Otherwise, it will be targetname_configname. It’s worth noting that keeping
+both of these short is advantageous for many facsum ingesting tools.
+By default, only key info (name,ra,dec,equinox) are added. Extra info
+from the configs can be added and will be appended as commented lines
+below each row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_extras</strong> (<em>list</em><em>, </em><em>default:</em><em> [</em><em>]</em>) – extra keywords to include in comments. Code will try to add them if they
+exist for a given configuration. (e.g., PAs or offsets)</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>default: './'</em>) – path to save targetlist to. default is current directory.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>default: 'targetlist'</em>) – name of the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>but saves the relevant targetlist file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>CURRENT_SUPPORTED_OBS: Palomar Observatory</p>
 </dd></dl>
 
 <dl class="py method">

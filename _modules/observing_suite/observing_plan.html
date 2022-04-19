@@ -236,6 +236,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="kn">from</span> <span class="nn">photutils.aperture</span> <span class="kn">import</span> <span class="n">SkyRectangularAperture</span><span class="p">,</span> <span class="n">SkyCircularAperture</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ObservingPlan&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ObservingPlan"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan">[docs]</a><span class="k">class</span> <span class="nc">ObservingPlan</span><span class="p">():</span>
@@ -372,6 +373,79 @@ const thebe_selector_output = ".output, .cell_output"
       <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;in&#39;</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> </div>
   
+<div class="viewcode-block" id="ObservingPlan.export_targetlist"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.export_targetlist">[docs]</a>  <span class="k">def</span> <span class="nf">export_targetlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">include_extras</span><span class="o">=</span><span class="p">[],</span><span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;targetlist&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Export an observatory-compliant targetlist of all targets and configurations.</span>
+<span class="sd">    If only one configuration exists, the name column will be the target name.</span>
+<span class="sd">    Otherwise, it will be targetname_configname. It&#39;s worth noting that keeping</span>
+<span class="sd">    both of these short is advantageous for many facsum ingesting tools.</span>
+<span class="sd">    By default, only key info (name,ra,dec,equinox) are added. Extra info</span>
+<span class="sd">    from the configs can be added and will be appended as commented lines </span>
+<span class="sd">    below each row.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    include_extras: list, default: []</span>
+<span class="sd">      extra keywords to include in comments. Code will try to add them if they</span>
+<span class="sd">      exist for a given configuration. (e.g., PAs or offsets)</span>
+<span class="sd">    save_path: str, default: &#39;./&#39;</span>
+<span class="sd">      path to save targetlist to. default is current directory.</span>
+<span class="sd">    name: str, default: &#39;targetlist&#39;</span>
+<span class="sd">      name of the file. </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">      but saves the relevant targetlist file.</span>
+<span class="sd">    </span>
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    CURRENT_SUPPORTED_OBS: Palomar Observatory</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">save_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span>
+      <span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">save_path</span> <span class="o">=</span> <span class="n">save_path</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span><span class="s1">&#39;.csv&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observatory</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">observatory</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;PALOMAR&#39;</span><span class="p">:</span>
+        <span class="n">write_str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_list</span><span class="p">:</span>
+          <span class="n">df</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configurations</span>
+          <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ra</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">dec</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">write_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">ra</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">dec</span><span class="si">}</span><span class="s1">,J2000 </span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">mini_str</span> <span class="o">=</span> <span class="s1">&#39;! ^^ &#39;</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">include_extras</span><span class="p">:</span>
+              <span class="k">try</span><span class="p">:</span>
+                <span class="n">mini_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s1">,&#39;</span>
+              <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">mini_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span> 
+            
+          <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+              <span class="n">write_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">config</span> 
+              <span class="n">ra</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">value</span>
+              <span class="n">dec</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">value</span>
+              <span class="n">write_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">write_name</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">ra</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">dec</span><span class="si">}</span><span class="s1">,J2000 </span><span class="se">\n</span><span class="s1">&#39;</span>
+              <span class="n">mini_str</span> <span class="o">=</span> <span class="s1">&#39;! ^^ &#39;</span>
+              <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">include_extras</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                  <span class="n">mini_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s1">,&#39;</span>
+                <span class="k">except</span><span class="p">:</span>
+                  <span class="k">continue</span>
+              <span class="n">mini_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+              <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span> 
+          <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;?????&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+          <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">write_str</span><span class="p">)</span></div>
+            
+
+
 <div class="viewcode-block" id="ObservingPlan.html_summary"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.html_summary">[docs]</a>  <span class="k">def</span> <span class="nf">html_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">save_dir</span><span class="p">,</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">view_range</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Produce a &#39;beautiful&#39; html output with the observing plan. </span>
@@ -508,6 +582,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="n">final</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="n">close</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;ObservingPlan_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;html_report.html&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
       <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">final</span><span class="p">)</span></div></div>
+    
 </pre></div>
 
               </div>
