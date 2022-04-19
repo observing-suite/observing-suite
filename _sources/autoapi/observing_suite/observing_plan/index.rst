@@ -17,9 +17,9 @@ Classes
 
 
 
-.. py:class:: ObservingPlan(target_list, observatory, obsdates, utcoffset)
+.. py:class:: ObservingPlan(target_list: list, observatory: str, obsdates: list, utcoffset: float)
 
-   .. py:method:: plot_visibility(self, date, target='all', view_range=12, plot_current_time=False, figsize=(30, 12), alt_min=10, alt_max=90)
+   .. py:method:: plot_visibility(self, date: str, target: str = 'all', view_range: float = 12, plot_current_time: bool = False, figsize: tuple = (30, 12), alt_min: float = 10, alt_max: float = 90)
 
       Produce a plot of altitude and airmass for targets on a given night of observing.
 
@@ -35,7 +35,7 @@ Classes
       :type figsize: tuple, optional (default (15,12))
 
 
-   .. py:method:: export_targetlist(self, include_extras=[], save_path='./', name='targetlist')
+   .. py:method:: export_targetlist(self, include_extras: list = [], include_offset_stars: bool = True, save_path: str = './', name: str = 'targetlist')
 
       Export an observatory-compliant targetlist of all targets and configurations.
       If only one configuration exists, the name column will be the target name.
@@ -48,6 +48,8 @@ Classes
       :param include_extras: extra keywords to include in comments. Code will try to add them if they
                              exist for a given configuration. (e.g., PAs or offsets)
       :type include_extras: list, default: []
+      :param include_offset_stars: whether to include offset stars as entries in the targetlist. Name format is <target>_<config>_os.
+      :type include_offset_stars: bool, default: True
       :param save_path: path to save targetlist to. default is current directory.
       :type save_path: str, default: './'
       :param name: name of the file.
@@ -61,7 +63,7 @@ Classes
       CURRENT_SUPPORTED_OBS: Palomar Observatory
 
 
-   .. py:method:: html_summary(self, date, save_dir, overwrite=True, view_range=12)
+   .. py:method:: html_summary(self, date: str, save_dir: str, overwrite: bool = True, view_range: float = 12)
 
       Produce a 'beautiful' html output with the observing plan.
 

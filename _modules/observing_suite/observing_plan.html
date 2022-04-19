@@ -240,7 +240,11 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ObservingPlan&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="ObservingPlan"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan">[docs]</a><span class="k">class</span> <span class="nc">ObservingPlan</span><span class="p">():</span>
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">target_list</span><span class="p">,</span><span class="n">observatory</span><span class="p">,</span><span class="n">obsdates</span><span class="p">,</span><span class="n">utcoffset</span><span class="p">):</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">target_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+            <span class="n">observatory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">obsdates</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+            <span class="n">utcoffset</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Initialize ObservingPlan object. </span>
 <span class="sd">    </span>
@@ -283,7 +287,14 @@ const thebe_selector_output = ".output, .cell_output"
       <span class="bp">self</span><span class="o">.</span><span class="n">total_configs</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">configurations</span><span class="p">)</span>
 
   
-<div class="viewcode-block" id="ObservingPlan.plot_visibility"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.plot_visibility">[docs]</a>  <span class="k">def</span> <span class="nf">plot_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">target</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span><span class="n">view_range</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">plot_current_time</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span><span class="n">alt_min</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">alt_max</span><span class="o">=</span><span class="mi">90</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservingPlan.plot_visibility"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.plot_visibility">[docs]</a>  <span class="k">def</span> <span class="nf">plot_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                    <span class="n">date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="n">target</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+                    <span class="n">view_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                    <span class="n">plot_current_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">12</span><span class="p">),</span>
+                    <span class="n">alt_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="n">alt_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">90</span><span class="p">):</span>
       <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">      Produce a plot of altitude and airmass for targets on a given night of observing. </span>
 
@@ -373,7 +384,11 @@ const thebe_selector_output = ".output, .cell_output"
       <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span><span class="n">direction</span><span class="o">=</span><span class="s1">&#39;in&#39;</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span><span class="n">top</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> </div>
   
-<div class="viewcode-block" id="ObservingPlan.export_targetlist"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.export_targetlist">[docs]</a>  <span class="k">def</span> <span class="nf">export_targetlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">include_extras</span><span class="o">=</span><span class="p">[],</span><span class="n">save_path</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;targetlist&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservingPlan.export_targetlist"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.export_targetlist">[docs]</a>  <span class="k">def</span> <span class="nf">export_targetlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">include_extras</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span><span class="p">[],</span>
+                      <span class="n">include_offset_stars</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                      <span class="n">save_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;./&#39;</span><span class="p">,</span>
+                      <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;targetlist&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Export an observatory-compliant targetlist of all targets and configurations.</span>
 <span class="sd">    If only one configuration exists, the name column will be the target name.</span>
@@ -388,10 +403,13 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">    include_extras: list, default: []</span>
 <span class="sd">      extra keywords to include in comments. Code will try to add them if they</span>
 <span class="sd">      exist for a given configuration. (e.g., PAs or offsets)</span>
+<span class="sd">    include_offset_stars: bool, default: True</span>
+<span class="sd">      whether to include offset stars as entries in the targetlist. Name format is &lt;target&gt;_&lt;config&gt;_os.</span>
 <span class="sd">    save_path: str, default: &#39;./&#39;</span>
 <span class="sd">      path to save targetlist to. default is current directory.</span>
 <span class="sd">    name: str, default: &#39;targetlist&#39;</span>
 <span class="sd">      name of the file. </span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -421,10 +439,16 @@ const thebe_selector_output = ".output, .cell_output"
               <span class="k">try</span><span class="p">:</span>
                 <span class="n">mini_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="si">}</span><span class="s1">,&#39;</span>
               <span class="k">except</span><span class="p">:</span>
-                <span class="k">continue</span>
+                <span class="k">continue</span> 
             <span class="n">mini_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span> 
-            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">include_extras</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+              <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span> 
+            <span class="k">if</span> <span class="s1">&#39;offset star&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+              <span class="k">if</span> <span class="n">include_offset_stars</span><span class="p">:</span>
+                <span class="n">write_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_os&#39;</span>
+                <span class="n">ra</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;offset star&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">dec</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;offset star&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">value</span>
+                <span class="n">write_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">write_name</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">ra</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">dec</span><span class="si">}</span><span class="s1">,J2000 </span><span class="se">\n</span><span class="s1">&#39;</span>
           <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
               <span class="n">write_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">config</span> 
@@ -438,7 +462,14 @@ const thebe_selector_output = ".output, .cell_output"
                 <span class="k">except</span><span class="p">:</span>
                   <span class="k">continue</span>
               <span class="n">mini_str</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
-              <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span> 
+              <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">include_extras</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">write_str</span> <span class="o">+=</span> <span class="n">mini_str</span>
+              <span class="k">if</span> <span class="s1">&#39;offset star&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">include_offset_stars</span><span class="p">:</span>
+                  <span class="n">write_name</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">config</span> <span class="o">+</span> <span class="s1">&#39;_os&#39;</span>
+                  <span class="n">ra</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;offset star&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ra</span><span class="o">.</span><span class="n">value</span>
+                  <span class="n">dec</span> <span class="o">=</span> <span class="n">target</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">][</span><span class="s1">&#39;offset star&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dec</span><span class="o">.</span><span class="n">value</span>
+                  <span class="n">write_str</span> <span class="o">=</span> <span class="n">write_str</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">write_name</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">ra</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">dec</span><span class="si">}</span><span class="s1">,J2000 </span><span class="se">\n</span><span class="s1">&#39;</span> 
           <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;?????&#39;</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -446,7 +477,11 @@ const thebe_selector_output = ".output, .cell_output"
             
 
 
-<div class="viewcode-block" id="ObservingPlan.html_summary"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.html_summary">[docs]</a>  <span class="k">def</span> <span class="nf">html_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">date</span><span class="p">,</span><span class="n">save_dir</span><span class="p">,</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">view_range</span><span class="o">=</span><span class="mi">12</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservingPlan.html_summary"><a class="viewcode-back" href="../../autoapi/observing_suite/observing_plan/index.html#observing_suite.ObservingPlan.html_summary">[docs]</a>  <span class="k">def</span> <span class="nf">html_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">date</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">save_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="n">view_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">12</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Produce a &#39;beautiful&#39; html output with the observing plan. </span>
 <span class="sd">    </span>

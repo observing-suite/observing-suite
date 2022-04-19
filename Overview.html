@@ -289,6 +289,11 @@ const thebe_selector_output = ".output, .cell_output"
    Observing Plan HTML Output
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exporting-targetlists">
+   Exporting Targetlists
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -371,6 +376,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#observing-plan-html-output">
    Observing Plan HTML Output
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exporting-targetlists">
+   Exporting Targetlists
   </a>
  </li>
 </ul>
@@ -828,6 +838,47 @@ const thebe_selector_output = ".output, .cell_output"
 <p>You can see an example of this in the <code class="docutils literal notranslate"><span class="pre">Examples/</span></code> folder. The HTML has a few nice features (so far) other than collating the information, charts, etc., for targets in a given night. For example, if you click on a target’s coordinates button, you’ll be taken (in a new tab) to the LegacyViewer interactive viewer centered on those coordinates. Clicking on any individual finder images will open a new tab with a more zoomed in version for inspection. You can see a “live” example <a href="Examples/SamplePlan/html_report.html" target="_blank">here.</a></p>
 <p>I hope to add more to this in the future, like making a live updating app/page which shows the current time on the visibility plot, allows you to order objects by minimum airmass, RA, or personal choice, and interact with plots all live. It’d be nice to let finder images be downloaded as FITS for easy opening in DS9, etc. (That’s easy, will do that very soon).</p>
 <p>If you’ve made it this far, please feel free to contact me or leave an issue on this repo with ideas for things that would be useful to you as an observer. This tool is build upon the amazing core features in <code class="docutils literal notranslate"><span class="pre">astropy</span></code>, <code class="docutils literal notranslate"><span class="pre">astroquery</span></code>, etc. It’s mostly about collating these, organizing them, and allowing for a lot of control. My goal is to make something useful to <em>me</em> at the telescope (or leading up to runs), that is flexible, but doesn’t have a ton of overhead. I am happy to take suggestions, pull requests, etc., to add convenience methods and special treats if certain inputs are provided.</p>
+</div>
+<div class="section" id="exporting-targetlists">
+<h2>Exporting Targetlists<a class="headerlink" href="#exporting-targetlists" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Observing-suite</span></code> can take your observing plan (your set of targets and configurations of those targets) and export an “observatory ready” targetlist for upload/ssh to the observatory FACSUM. As each observatory has specific requirements for how this file is supposed to look, I’ll be adding them on an observatory by observatory basis.</p>
+<p>For now, the currently supported export is for Palomar Observatory. But thankfully, that format is pretty simple:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">J2000</span>
+<span class="n">name</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">dec</span><span class="p">,</span> <span class="n">J2000</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>(or whatever equinox…). So ideally, you can modify this to your needs if your observatory is not yet supported. Keck is coming soon.</p>
+<p>You can export a targetlist by running the <code class="docutils literal notranslate"><span class="pre">export_targetlist()</span></code> method of an observing plan. By default, it will save to the current working directory a file called <code class="docutils literal notranslate"><span class="pre">targetlist.csv</span></code> but you can edit both (see docs <a class="reference external" href="https://observing-suite.github.io/autoapi/observing_suite/observing_plan/index.html#observing_suite.observing_plan.ObservingPlan">here</a>). In particular, you can <code class="docutils literal notranslate"><span class="pre">name</span></code> the file, and set the <code class="docutils literal notranslate"><span class="pre">save_dir</span></code>.</p>
+<p>Additionally, you may have extra information in your configurations (like PA, or offsets, etc.) which you want in your targetlist for convenience. You can add the keyword <code class="docutils literal notranslate"><span class="pre">include_extras</span></code> with a list of these keys (must be exact) and the code will attempt to add them as commented lines. For example, if we run</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_plan</span><span class="o">.</span><span class="n">export_targetlist</span><span class="p">(</span><span class="n">include_extras</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;PA&#39;</span><span class="p">,</span><span class="s1">&#39;offsets&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>then our output file will look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>target1, 138.2353, 41.43452,J2000
+! ^^ PA: 60, offsets: 1.3&quot; E, 45&quot; N
+target2,138.5353, 41.43242,J2000
+! ^^ PA: 45, offsets: 6.3&quot; E, 12.853&quot; N
+...
+</pre></div>
+</div>
+<p>Note that if a given target doesn’t have the extra asked for, it will just continue on.</p>
+<p>In the above examples, the “name” column contains just the target name as the code noticed there was only one configuration for each target. If we add a second configuration to <code class="docutils literal notranslate"><span class="pre">target1</span></code> (lets call the configs <code class="docutils literal notranslate"><span class="pre">pri</span></code> and <code class="docutils literal notranslate"><span class="pre">sec</span></code>), We’ll get a file like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>target1_pri, 138.2353, 41.43452,J2000
+! ^^ PA: 60, offsets: 1.3&quot; E, 45&quot; N
+target1_sec, 138.2353, 41.43452,J2000
+! ^^ PA: 50, offsets: 1.3&quot; E, 45&quot; N
+target2,138.5353, 41.43242,J2000
+! ^^ PA: 45, offsets: 6.3&quot; E, 12.853&quot; N
+...
+</pre></div>
+</div>
+<p>I.e., configuration names are appended to the target name with an underscore.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Many observatory ingest softwares have a max limit on each column width, so keeping both target and config names short is always a good idea.</p>
+</div>
+<p>Similarly, if a configuration has the field <code class="docutils literal notranslate"><span class="pre">'offset</span> <span class="pre">star'</span></code>, a new line will be added with the format <code class="docutils literal notranslate"><span class="pre">target_config_os</span></code> so that the offset star can be navigated to directly. If you wish to turn this off, set the argument <code class="docutils literal notranslate"><span class="pre">include_offset_stars</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </div>
 </div>
 
