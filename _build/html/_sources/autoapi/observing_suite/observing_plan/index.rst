@@ -35,6 +35,32 @@ Classes
       :type figsize: tuple, optional (default (15,12))
 
 
+   .. py:method:: export_targetlist(self, include_extras=[], save_path='./', name='targetlist')
+
+      Export an observatory-compliant targetlist of all targets and configurations.
+      If only one configuration exists, the name column will be the target name.
+      Otherwise, it will be targetname_configname. It's worth noting that keeping
+      both of these short is advantageous for many facsum ingesting tools.
+      By default, only key info (name,ra,dec,equinox) are added. Extra info
+      from the configs can be added and will be appended as commented lines
+      below each row.
+
+      :param include_extras: extra keywords to include in comments. Code will try to add them if they
+                             exist for a given configuration. (e.g., PAs or offsets)
+      :type include_extras: list, default: []
+      :param save_path: path to save targetlist to. default is current directory.
+      :type save_path: str, default: './'
+      :param name: name of the file.
+      :type name: str, default: 'targetlist'
+
+      :returns: but saves the relevant targetlist file.
+      :rtype: None
+
+      .. rubric:: Notes
+
+      CURRENT_SUPPORTED_OBS: Palomar Observatory
+
+
    .. py:method:: html_summary(self, date, save_dir, overwrite=True, view_range=12)
 
       Produce a 'beautiful' html output with the observing plan.
